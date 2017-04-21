@@ -1,9 +1,2 @@
-# iris-sample-predictor-app
-Sample Flask App using Scikit-Learn Model
-
-
-If you are using Anaconda, run:
-
-```
-conda install flask flask-wtf
-```
+# Crime Prediction App
+Flask app and D3 to visualize different crimes in San Francisco, CA.
