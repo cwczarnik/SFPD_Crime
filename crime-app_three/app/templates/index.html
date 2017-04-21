@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block header %}
+<style>
+  .map-selection {
+    background-color: ;
+    border: 2px solid;
+    border-radius: 10px;
+    border-color: #fff;
+    padding: 4px;
+}
+  .map-selection:hover {
+    background-color: #bbb;
+  }
+  .map-selection-active {
+    background-color: #aaa;
+  }
+
+  .map-hidden {
+    display: none;
+  }
+  .plot-secton {
+    margin: 30px;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+  <section class="header">
+    <h2 align="center" class="title">SFPD CRIME PREDICTION</h2>
+  </section>
+  <div class="container">
+    <h1 align = 'center'  >
+      What kind of crime can I expect in this area?
+    </h1>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+      <div class="row" >
+        <div class="four columns">
+          {{ form.Latitude.label}} {{ form.Latitude() }}
+        </div>
+        <div class="four columns">
+          {{ form.Longitude.label }} {{ form.Longitude() }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="four columns">
+          {{ form.Day.label }} {{ form.Day() }}
+        </div>
+        <div class="four columns">
+          {{ form.Hour.label }} {{ form.Hour() }}
+        </div>
+      </div>
+      <div class="row">
+        <button type="submit" class="button-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+    <div class = "row plot-secton">
+      <div class = "six columns">
+        <h3>Probability Of Crimes</h3>
+        <img src={{url_for('static', filename='fig/myfigcopy.png')}} alt="" width="100%">
+          <h3>
+            <b>Baseline probabilities over all time and locations:</b>
+              Violent: 0.2232
+              Property: 0.3198
+              Non-violent: 0.4569
+            </h3>
+      </div>
+      <div class="six columns">
+        <span class="map-selection map-selection-active" data-id="violent-crime-map">Violent Crimes Map</span>
+        <span class="map-selection" data-id="non-violent-crime-map">Non-Violent Crimes Map</span>
+        <span class="map-selection" data-id="property-map">Property Map</span>
+        <div class="row map-display" id="violent-crime-map">
+            <h3>Violent Crimes Map</h3>
+            <img src={{url_for('static', filename='fig/violent_map.png')}} alt="" width="100%">
+        </div>
+        <div class="row map-display map-hidden" id="non-violent-crime-map">
+            <h3>Non-Violent Crimes Map</h3>
+            <img src={{url_for('static', filename='fig/non_violent_map.png')}} alt="" width="100%">
+        </div>
+        <div class="row map-display map-hidden" id="property-map">
+            <h3>Property Map</h3>
+            <img src={{url_for('static', filename='fig/property_map.png')}} alt="" width="100%">
+        </div>
+      </div>
+    </div>
+{% endblock body %}
+{% block js %}
+  <script type="text/javascript">
+    d3.selectAll(".map-selection")
+      .on("click", function() {
+        d3.selectAll(".map-selection").classed("map-selection-active", false);
+        d3.select(this).classed("map-selection-active", true);
+
+        d3.select(this).attr("data-id");
+        d3.selectAll(".map-display").classed("map-hidden", true);
+        var map_id = d3.select(this).attr("data-id");
+        d3.select("#" + map_id).classed("map-hidden", false);
+      });
+
+  </script>
+{% endblock js %}
